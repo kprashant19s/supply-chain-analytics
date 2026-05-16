@@ -129,7 +129,7 @@ First Class shipping — despite being premium priced — has a **100% delay rat
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/supply_chain_analytics.git
+git clone https://github.com/kprashant19s/supply-chain-analytics.git
 cd supply_chain_analytics
 
 # Create virtual environment

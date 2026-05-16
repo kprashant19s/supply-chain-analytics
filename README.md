@@ -117,6 +117,17 @@ First Class shipping — despite being premium priced — has a **100% delay rat
 
 ---
 
+### Chart Previews
+
+![Delay by Shipping Mode](images/01_delay_by_shipping_mode.png)
+![Monthly Revenue Trend](images/02_monthly_revenue_delay_trend.png)
+![Profit Margin by Segment](images/03_profit_margin_by_segment.png)
+![Delay Heatmap](images/04_delay_heatmap_market_shipping.png)
+![High Risk Routes](images/05_top10_high_risk_supplier_routes.png)
+![Discount vs Profit](images/06_discount_profit_correlation.png)
+
+---
+
 ## 🚀 How to Run
 
 ### Prerequisites

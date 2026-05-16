@@ -182,9 +182,9 @@ jupyter notebook notebooks/eda_notebook.ipynb
 
 ## 👤 Author
 
-**Prashant Singh**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [yourlinkedin](https://linkedin.com/in/yourlinkedin)
+**Prashant Kumar**
+- GitHub: [Prashant Kumar](https://github.com/kprashant19s)
+- LinkedIn: [Prashant Kumar](https://www.linkedin.com/in/prashant-kumar-19s/)
 
 ---
 

@@ -6,3 +6,5 @@ __pycache__/
 .DS_Store.vscode/
 .vscode/
 *.session.sql
+.DS_Store
+**/.DS_Store

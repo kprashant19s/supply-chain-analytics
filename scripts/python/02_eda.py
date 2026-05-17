@@ -298,72 +298,114 @@ plt.close()
 
 # ════════════════════════════════════════════════════════════
 # STEP 7: Chart 5 — Top 10 High Risk Supplier Routes
+# FIX: Switched to horizontal bar chart — bubble chart was
+#      unreadable due to all points clustering at 100% delay
+# CHART TYPE: Dual horizontal bar chart
 # ════════════════════════════════════════════════════════════
 print("   Chart 5: Top 10 High Risk Supplier Routes")
 
-fig, ax = plt.subplots(figsize=(14, 7))
+fig, axes = plt.subplots(1, 2, figsize=(18, 8))
 
+# ── Aggregate supplier route metrics ──
 supplier_risk = (
     df.groupby(["market", "order_region", "shipping_mode"])
     .agg(
         total_orders   = ("order_id",        "count"),
         delay_rate_pct = ("is_delayed",      "mean"),
-        total_revenue  = ("sales_per_order", "sum")
+        total_revenue  = ("sales_per_order", "sum"),
+        avg_days_late  = ("delay_days",      "mean")
     ).reset_index()
 )
 supplier_risk["delay_rate_pct"] = (
     supplier_risk["delay_rate_pct"] * 100
 ).round(2)
+
+# Risk score = delay rate × log(volume)
+# Penalises high-volume delays more than low-volume ones
 supplier_risk["risk_score"] = (
     supplier_risk["delay_rate_pct"] *
     np.log(supplier_risk["total_orders"])
 ).round(2)
+
+# Revenue at risk = revenue × delay rate
+supplier_risk["revenue_at_risk"] = (
+    supplier_risk["total_revenue"] *
+    supplier_risk["delay_rate_pct"] / 100
+).round(2)
+
+# Filter high volume routes only
 supplier_risk = supplier_risk[supplier_risk["total_orders"] > 100]
-top10 = supplier_risk.nlargest(10, "risk_score")
+
+# Top 10 by risk score
+top10 = supplier_risk.nlargest(10, "risk_score").copy()
 top10["route_label"] = (
-    top10["order_region"] + "\n" + top10["shipping_mode"]
+    top10["order_region"] + " — " + top10["shipping_mode"]
 )
+# Sort ascending so highest risk appears at top
+top10 = top10.sort_values("risk_score", ascending=True)
 
-markets  = top10["market"].unique()
-palette  = ["#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6"]
+# Color by market
+markets   = top10["market"].unique()
+palette   = ["#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6"]
 color_map = {m: palette[i] for i, m in enumerate(markets)}
-colors   = top10["market"].map(color_map)
-bubble_size = (
-    top10["total_revenue"] /
-    top10["total_revenue"].max() * 2000
-)
+colors    = top10["market"].map(color_map)
 
-ax.scatter(
-    top10["total_orders"], top10["delay_rate_pct"],
-    s=bubble_size, c=colors, alpha=0.75,
-    edgecolors="white", linewidth=1.5
+# ── LEFT: Risk Score bar chart ──
+bars1 = axes[0].barh(
+    top10["route_label"],
+    top10["risk_score"],
+    color=colors, edgecolor="white", height=0.6
 )
-for _, row in top10.iterrows():
-    ax.annotate(
-        row["route_label"],
-        (row["total_orders"], row["delay_rate_pct"]),
-        textcoords="offset points",
-        xytext=(10, 5), fontsize=8, alpha=0.9
+for bar, val in zip(bars1, top10["risk_score"]):
+    axes[0].text(
+        bar.get_width() + 0.5,
+        bar.get_y() + bar.get_height() / 2,
+        f"{val:.1f}",
+        va="center", fontsize=9, fontweight="bold"
     )
-
-ax.axhline(
-    y=supplier_risk["delay_rate_pct"].mean(),
-    color="gray", linestyle="--", alpha=0.6,
-    label=f"Avg delay: {supplier_risk['delay_rate_pct'].mean():.1f}%"
+axes[0].set_xlabel("Risk Score", fontsize=11)
+axes[0].set_title(
+    "Top 10 Routes by Risk Score",
+    fontsize=13, fontweight="bold"
 )
+axes[0].tick_params(axis="y", labelsize=9)
 legend_elements = [
     Patch(facecolor=color_map[m], label=m) for m in markets
 ]
-ax.legend(handles=legend_elements, title="Market", loc="lower right")
-ax.set_xlabel("Total Orders (Volume)", fontsize=12)
-ax.set_ylabel("Delay Rate (%)", fontsize=12)
-ax.set_title(
-    "Top 10 High Risk Supplier Routes\n(Bubble size = Revenue at risk)",
-    fontsize=14, fontweight="bold", pad=15
+axes[0].legend(
+    handles=legend_elements,
+    title="Market", loc="lower right", fontsize=9
+)
+
+# ── RIGHT: Revenue at Risk bar chart ──
+bars2 = axes[1].barh(
+    top10["route_label"],
+    top10["revenue_at_risk"] / 1_000_000,
+    color=colors, edgecolor="white", height=0.6
+)
+for bar, val in zip(bars2, top10["revenue_at_risk"]):
+    axes[1].text(
+        bar.get_width() + 0.01,
+        bar.get_y() + bar.get_height() / 2,
+        f"${val/1_000_000:.2f}M",
+        va="center", fontsize=9, fontweight="bold"
+    )
+axes[1].set_xlabel("Revenue at Risk ($M)", fontsize=11)
+axes[1].set_title(
+    "Top 10 Routes by Revenue at Risk",
+    fontsize=13, fontweight="bold"
+)
+axes[1].tick_params(axis="y", labelsize=9)
+
+plt.suptitle(
+    "High Risk Supplier Route Analysis",
+    fontsize=15, fontweight="bold", y=1.02
 )
 plt.tight_layout()
-plt.savefig(f"{IMAGES_DIR}05_top10_high_risk_supplier_routes.png",
-            dpi=150, bbox_inches="tight")
+plt.savefig(
+    f"{IMAGES_DIR}05_top10_high_risk_supplier_routes.png",
+    dpi=150, bbox_inches="tight"
+)
 plt.close()
 
 # ════════════════════════════════════════════════════════════

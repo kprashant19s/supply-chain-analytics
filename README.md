@@ -37,44 +37,53 @@ An end-to-end data analytics project analyzing **180,519 supply chain orders** a
 
 ---
 
-## 📁 Project Structure 
+## 📁 Project Structure
 
+```
 supply_chain_analytics/
 ├── data/
-│   ├── raw/                          ← original Kaggle CSV
+│   ├── raw/                        ← original Kaggle CSV
 │   └── processed/
 │       ├── supply_chain_cleaned.csv  ← cleaned dataset
 │       ├── monthly_kpi.csv           ← monthly KPI summary
 │       ├── supplier_scorecard.csv    ← supplier risk scores
-│       └── segment_summary.csv      ← customer segments
+│       └── segment_summary.csv       ← customer segments
 ├── scripts/
 │   ├── sql/
-│   │   ├── 01_schema.sql            ← star schema DDL
-│   │   └── 02_queries.sql           ← analytical queries
+│   │   ├── 01_schema.sql             ← star schema DDL
+│   │   └── 02_queries.sql            ← analytical queries
 │   └── python/
-│       ├── 01_ingest.py             ← CSV → MySQL pipeline
-│       └── 02_eda.py                ← EDA script
+│       ├── 01_ingest.py              ← CSV → MySQL pipeline
+│       └── 02_eda.py                 ← EDA script
 ├── notebooks/
-│   └── eda_notebook.ipynb           ← full EDA notebook
-├── images/                          ← all chart exports
-├── reports/                         ← final reports
+│   └── eda_notebook.ipynb            ← full EDA notebook
+├── images/                           ← all chart exports
+├── reports/                          ← final reports
 ├── .gitignore
 └── README.md
+```
 
 ---
 
-## 🗄️ Database Schema (Star Schema)
+## 🗃️ Database Schema (Star Schema)
 
-dim_customer ──┐
-dim_product  ──┤── fact_orders
-dim_supplier ──┘
+```
+                    ┌─────────────┐
+                    │ fact_orders │
+                    └──────┬──────┘
+          ┌────────────────┼────────────────┐
+          ▼                ▼                ▼
+  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+  │ dim_customer │ │  dim_product │ │ dim_supplier │
+  └──────────────┘ └──────────────┘ └──────────────┘
+```
 
-| Table | Rows | Description |
-|---|---|---|
-| dim_customer | 18,963 | Unique customer profiles |
-| dim_product | 118 | Product SKUs and categories |
-| dim_supplier | 92 | Market + region + shipping mode |
-| fact_orders | 180,519 | Order line items (grain) |
+| Table         | Rows    | Description                    |
+|---------------|---------|--------------------------------|
+| dim_customer  | 18,963  | Unique customer profiles       |
+| dim_product   | 118     | Product SKUs and categories    |
+| dim_supplier  | 92      | Market + region + shipping mode|
+| fact_orders   | 180,519 | Order line items (grain)       |
 
 ---
 

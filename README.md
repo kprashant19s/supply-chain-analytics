@@ -115,24 +115,27 @@ First Class shipping — despite being premium priced — has a **100% delay rat
 
 ## 📈 Charts Generated
 
-| # | Chart | Insight |
-|---|---|---|
-| 1 | Delay Rate by Shipping Mode | First Class = 100% delayed |
-| 2 | Monthly Revenue vs Delay Trend | Delay rate stable at 57% |
-| 3 | Profit Margin by Segment | Consumer segment most profitable |
-| 4 | Delay Heatmap by Market | Africa + Second Class = highest risk |
-| 5 | Top 10 High Risk Supplier Routes | LATAM routes highest risk score |
-| 6 | Discount vs Profit Correlation | Weak negative correlation (r = 0.049) |
-
----
+| # | Chart | Type | Insight |
+|---|---|---|---|
+| 1 | Delay Rate by Shipping Mode | Horizontal Bar | First Class = 100% delayed 🚨 |
+| 2 | Monthly Revenue vs Delay Trend | Dual Axis Line | Delay rate stable at 57% throughout |
+| 3 | Profit Margin by Customer Segment | Grouped Bar | Consumer segment most profitable |
+| 4 | Delay Rate Heatmap | Heatmap | Africa + Second Class = highest risk |
+| 5 | High Risk Supplier Route Analysis | Dual Horizontal Bar | Central America — First Class = highest risk score |
+| 6 | Discount vs Profit Correlation | Scatter + Bar | Weak negative correlation (r = 0.049) |
 
 ### Chart Previews
 
 ![Delay by Shipping Mode](images/01_delay_by_shipping_mode.png)
+
 ![Monthly Revenue Trend](images/02_monthly_revenue_delay_trend.png)
+
 ![Profit Margin by Segment](images/03_profit_margin_by_segment.png)
+
 ![Delay Heatmap](images/04_delay_heatmap_market_shipping.png)
-![High Risk Routes](images/05_top10_high_risk_supplier_routes.png)
+
+![High Risk Supplier Routes](images/05_top10_high_risk_supplier_routes.png)
+
 ![Discount vs Profit](images/06_discount_profit_correlation.png)
 
 ---
